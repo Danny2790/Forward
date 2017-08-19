@@ -1,4 +1,4 @@
-package com.akash.forward;
+package com.akash.forward.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.akash.forward.Models.UserInfo;
+import com.akash.forward.R;
 import com.akash.forward.Utility.SPManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -26,17 +27,15 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 
 
-public class MainActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
-    private String TAG = MainActivity.class.getSimpleName();
+    private String TAG = LoginActivity.class.getSimpleName();
     TextView textViewUser;
     private LoginButton loginButton;
     FirebaseAuth firebaseAuth;
@@ -93,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                             Log.d(TAG, "onComplete: " + " user display name " + user.getDisplayName() + " email  " + user.getEmail());
                         } else {
-                            Toast.makeText(MainActivity.this, "Authentication failed ", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Authentication failed ", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -160,5 +159,9 @@ public class MainActivity extends AppCompatActivity {
 //        } catch (Exception e) {
 //            Log.d(TAG, "BUNDLE Exception : " + e.toString());
 //        }
+    }
+
+    public void signOutFirebase(){
+        FirebaseAuth.getInstance().signOut();
     }
 }

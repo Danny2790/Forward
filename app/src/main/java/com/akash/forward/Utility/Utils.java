@@ -43,7 +43,7 @@ public class Utils {
 
     public static boolean isUserLoggedIn(){
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        Log.d("MainActivity ", "current token  : " + accessToken);
+        Log.d("LoginActivity ", "current token  : " + accessToken);
         return  accessToken != null;
     }
 }
