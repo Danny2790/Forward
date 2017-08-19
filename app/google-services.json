@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "348346948079",
+    "firebase_url": "https://forward-19374.firebaseio.com",
+    "project_id": "forward-19374",
+    "storage_bucket": "forward-19374.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348346948079:android:758625023a255ed3",
+        "android_client_info": {
+          "package_name": "com.akash.forward"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348346948079-dsu96hbpn0mbaqcur0v1kn2808jk6lps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkHEoFu_hrpJoruTf2xS4X5kaC2te3dII"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
