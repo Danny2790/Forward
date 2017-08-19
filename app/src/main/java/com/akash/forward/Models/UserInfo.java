@@ -19,6 +19,18 @@ public class UserInfo {
     @Expose
     private String email;
 
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    @SerializedName("profile_pic")
+    @Expose
+    private String profilePic;
+
     public String getId() {
         return id;
     }
@@ -49,6 +61,7 @@ public class UserInfo {
                 "id='" + id + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", email='" + email + '\'' +
+                ", profilePic='" + profilePic + '\'' +
                 '}';
     }
 }

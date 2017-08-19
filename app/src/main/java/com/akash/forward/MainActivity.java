@@ -26,8 +26,11 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 
@@ -131,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
     private void getFacebookData(JSONObject object) {
         try {
             if (object != null) {
+                String id = object.getString("id");
+                URL profile_pic;
+                profile_pic = new URL("https://graph.facebook.com/" + id + "/picture?type=large");
+                Log.i("profile_pic", profile_pic.toString() + "");
+                object.put("profile_pic", profile_pic);
                 Log.d(TAG, "getFacebookData: " + object.toString());
                 SPManager.saveUserInfo(this, object.toString());
                 UserInfo userInfo = SPManager.getUserInfo(this);
