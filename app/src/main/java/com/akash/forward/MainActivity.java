@@ -6,11 +6,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.akash.forward.Models.UserInfo;
+import com.akash.forward.Utility.SPManager;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,13 +32,30 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
         textViewUser = (TextView) findViewById(R.id.tv_userid);
+
         callbackManager = CallbackManager.Factory.create();
 
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                Log.d(TAG, "onSuccess: " + loginResult.toString());
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject jsonObject,
+                                                    GraphResponse response) {
+                                // Getting FB User Data
+                                getFacebookData(jsonObject);
+                            }
+                        });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id, first_name, email");
+                request.setParameters(parameters);
+                request.executeAsync();
+
                 textViewUser.setText(
                         "User ID: "
                                 + loginResult.getAccessToken().getUserId()
@@ -57,5 +82,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void getFacebookData(JSONObject object) {
+        try {
+            if (object != null) {
+                Log.d(TAG, "getFacebookData: " + object.toString());
+                SPManager.saveUserInfo(this, object.toString());
+                UserInfo userInfo = SPManager.getUserInfo(this);
+                Log.d(TAG, "get user info : " + userInfo.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+//        Bundle bundle = new Bundle();
+//        try {
+//            String id = object.getString("id");
+//            bundle.putString("idFacebook", id);
+//            if (object.has("first_name"))
+//                bundle.putString("first_name", object.getString("first_name"));
+//            if (object.has("email"))
+//                bundle.putString("email", object.getString("email"));
+//            SPManager.saveUserInfo(this, id, object.getString("first_name"), object.getString("email"));
+//        } catch (Exception e) {
+//            Log.d(TAG, "BUNDLE Exception : " + e.toString());
+//        }
     }
 }
