@@ -6,7 +6,9 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.akash.forward.Activities.LoginActivity;
 import com.facebook.AccessToken;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -22,7 +24,7 @@ import static com.facebook.login.widget.ProfilePictureView.TAG;
 public class Utils {
     private static FirebaseDatabase mDatabase;
 
-    public static void getHashKey(Context context){
+    public static void getHashKey(Context context) {
         PackageInfo info;
         try {
             info = context.getPackageManager().getPackageInfo("com.akash.forward", PackageManager.GET_SIGNATURES);
@@ -43,10 +45,10 @@ public class Utils {
         }
     }
 
-    public static boolean isUserLoggedIn(){
+    public static boolean isUserLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Log.d("LoginActivity ", "current token  : " + accessToken);
-        return  accessToken != null;
+        return accessToken != null;
     }
 
     public static FirebaseDatabase getDatabase() {
@@ -55,5 +57,9 @@ public class Utils {
             mDatabase.setPersistenceEnabled(true);
         }
         return mDatabase;
+    }
+
+    public static void showMessage(Context context, String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }
