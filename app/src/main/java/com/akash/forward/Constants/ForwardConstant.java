@@ -21,6 +21,7 @@ public class ForwardConstant {
 
     //activity intent
     public final static int SELECT_PICTURE = 1000;
+    public final static String POST_ID = "post_id";
 
     //Messages
     public static final String LOGIN_FAILED = "Authentcation Failed!";

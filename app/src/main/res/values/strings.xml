@@ -4,4 +4,7 @@
     <string name="fb_login_protocol_scheme">fb280077389066219</string>
     <string name="btn_upload">Upload</string>
     <string name="creat_post">Creat a new post</string>
+    <string name="comment_title">Comments</string>
+    <string name="btn_comment">Post</string>
+    <string name="comment_hint">Enter Comment</string>
 </resources>

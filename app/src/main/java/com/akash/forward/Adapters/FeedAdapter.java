@@ -1,6 +1,7 @@
 package com.akash.forward.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.akash.forward.Activities.CommentActivity;
 import com.akash.forward.Models.Feed;
 import com.akash.forward.R;
 import com.akash.forward.Utility.Utils;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 
 import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_FEEDS;
 import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_LIKES;
+import static com.akash.forward.Constants.ForwardConstant.POST_ID;
 
 /**
  * Created by akash on 8/20/2017.
@@ -89,7 +92,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                 });
             }
         });
-
+        holder.imageViewComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, CommentActivity.class);
+                intent.putExtra(POST_ID, feed.getPostId());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
