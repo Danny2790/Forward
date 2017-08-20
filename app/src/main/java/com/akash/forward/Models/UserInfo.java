@@ -18,6 +18,10 @@ public class UserInfo {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("profile_pic")
+    @Expose
+    private String profilePic;
+
 
     public String getProfilePic() {
         return profilePic;
@@ -27,9 +31,6 @@ public class UserInfo {
         this.profilePic = profilePic;
     }
 
-    @SerializedName("profile_pic")
-    @Expose
-    private String profilePic;
 
     public String getId() {
         return id;
