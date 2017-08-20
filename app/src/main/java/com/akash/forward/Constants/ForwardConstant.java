@@ -15,7 +15,9 @@ public class ForwardConstant {
 
     //Firebase
     public final static String STORAGE_REF = "images";
-    public final static String FIREBASE_DB_REF = "feeds";
+    public final static String FIREBASE_DB_FEEDS = "feeds";
+    public final static String FIREBASE_DB_LIKES = "likes";
+    public final static String FIREBASE_DB_COMMENTS = "comments";
 
     //activity intent
     public final static int SELECT_PICTURE = 1000;
