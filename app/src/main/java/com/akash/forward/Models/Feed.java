@@ -7,10 +7,11 @@ package com.akash.forward.Models;
 public class Feed {
     private UserInfo userInfo;
     private String imageUrl;
+    private String postId;
     private int likesCount = 0;
     private int commentsCount = 0;
 
-    public Feed(){
+    public Feed() {
         // Default constructor required for calls to DataSnapshot.getValue(Feed.class)
     }
 
@@ -46,11 +47,20 @@ public class Feed {
         this.imageUrl = imageUrl;
     }
 
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
+
     @Override
     public String toString() {
         return "Feed{" +
                 "userInfo=" + userInfo +
                 ", imageUrl='" + imageUrl + '\'' +
+                ", postId='" + postId + '\'' +
                 ", likesCount=" + likesCount +
                 ", commentsCount=" + commentsCount +
                 '}';

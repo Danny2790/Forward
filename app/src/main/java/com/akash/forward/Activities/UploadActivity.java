@@ -111,9 +111,12 @@ public class UploadActivity extends AppCompatActivity {
     private void addPost(Uri downloaduri) {
         Feed feed = new Feed();
         UserInfo userInfo = SPManager.getUserInfo(this);
+        DatabaseReference dbRef = mFirebaseDatabaseReference.push();
+        Log.d(TAG, "addPost:  post key :" + dbRef.getKey());
+        feed.setPostId(dbRef.getKey());
         feed.setUserInfo(userInfo);
         feed.setImageUrl(downloaduri.toString());
-        mFirebaseDatabaseReference.push().setValue(feed, new DatabaseReference.CompletionListener() {
+        dbRef.setValue(feed, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 //if successfull : databaserror = null

@@ -11,9 +11,14 @@ import android.widget.TextView;
 
 import com.akash.forward.Models.Feed;
 import com.akash.forward.R;
+import com.akash.forward.Utility.Utils;
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+
+import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_REF;
 
 /**
  * Created by akash on 8/20/2017.
@@ -23,10 +28,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     private ArrayList<Feed> feedList;
     private Context context;
     private String TAG = FeedAdapter.class.getSimpleName();
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference mFirebaseDatabaseReference;
 
     public FeedAdapter(Context context, ArrayList<Feed> feedList) {
         this.context = context;
         this.feedList = feedList;
+        mFirebaseDatabase = Utils.getDatabase();
+        mFirebaseDatabaseReference = mFirebaseDatabase.getReference(FIREBASE_DB_REF);
     }
 
     @Override
