@@ -43,7 +43,7 @@ public class FeedActivity extends AppCompatActivity {
         feedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         feedRecyclerView.setHasFixedSize(true);
         feedRecyclerView.setAdapter(feedAdapter);
-        Button button = (Button) findViewById(R.id.btn_upload);
+        Button button = (Button) findViewById(R.id.btn_create_post);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

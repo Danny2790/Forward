@@ -7,15 +7,18 @@
     tools:context="com.akash.forward.Activities.FeedActivity">
 
     <Button
-        android:id="@+id/btn_upload"
+        android:id="@+id/btn_create_post"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Upload New" />
+        android:drawableLeft="@drawable/ic_create_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="@string/creat_post" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_feed"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:padding="@dimen/margin_vertical"
         tools:listitem="@layout/feed_item"></android.support.v7.widget.RecyclerView>
 </LinearLayout>
