@@ -52,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             Log.d(TAG, "onStart: " + currentUser.toString());
-            Intent intent = new Intent(this, UploadActivity.class);
+            Intent intent = new Intent(this, FeedActivity.class);
             startActivity(intent);
         }
     }
