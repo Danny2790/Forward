@@ -1,6 +1,8 @@
 package com.akash.forward.Adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 
 import com.akash.forward.Models.Feed;
 import com.akash.forward.R;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -18,8 +21,11 @@ import java.util.ArrayList;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     private ArrayList<Feed> feedList;
+    private Context context;
+    private String TAG = FeedAdapter.class.getSimpleName();
 
-    public FeedAdapter(ArrayList<Feed> feedList) {
+    public FeedAdapter(Context context, ArrayList<Feed> feedList) {
+        this.context = context;
         this.feedList = feedList;
     }
 
@@ -33,6 +39,10 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Feed feed = feedList.get(position);
         holder.textViewUsername.setText(feed.getUserInfo().getFirstName());
+        Log.d(TAG, "onBindViewHolder: " + feed.getImageUrl());
+        Glide.with(context)
+                .load(feed.getImageUrl())
+                .into(holder.imageViewFeed);
     }
 
     @Override
