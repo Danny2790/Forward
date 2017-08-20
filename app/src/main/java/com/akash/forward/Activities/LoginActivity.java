@@ -52,9 +52,14 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             Log.d(TAG, "onStart: " + currentUser.toString());
-            Intent intent = new Intent(this, FeedActivity.class);
-            startActivity(intent);
+            launchFeedActivity();
         }
+    }
+
+    private void launchFeedActivity() {
+        Intent intent = new Intent(this, FeedActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -92,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: " + "sign in success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
+                            launchFeedActivity();
                             Log.d(TAG, "onComplete: " + " user display name " + user.getDisplayName() + " email  " + user.getEmail());
                         } else {
                             Toast.makeText(LoginActivity.this, "Authentication failed ", Toast.LENGTH_LONG).show();
