@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_REF;
+import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_FEEDS;
 
 public class FeedActivity extends AppCompatActivity {
 
@@ -52,7 +52,7 @@ public class FeedActivity extends AppCompatActivity {
         });
         if (mFirebaseDatabase == null) {
             mFirebaseDatabase = Utils.getDatabase();
-            mFirebaseDatabaseReference = mFirebaseDatabase.getReference(FIREBASE_DB_REF);
+            mFirebaseDatabaseReference = mFirebaseDatabase.getReference(FIREBASE_DB_FEEDS);
             setupFirebaseDbListener();
         }
     }

@@ -30,7 +30,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 
-import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_REF;
+import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_FEEDS;
 import static com.akash.forward.Constants.ForwardConstant.SELECT_PICTURE;
 import static com.akash.forward.Constants.ForwardConstant.SERVER_ERROR;
 import static com.akash.forward.Constants.ForwardConstant.STORAGE_REF;
@@ -53,7 +53,7 @@ public class UploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_upload);
         if (mFirebaseDatabase == null) {
             mFirebaseDatabase = Utils.getDatabase();
-            mFirebaseDatabaseReference = mFirebaseDatabase.getReference(FIREBASE_DB_REF);
+            mFirebaseDatabaseReference = mFirebaseDatabase.getReference(FIREBASE_DB_FEEDS);
         }
         progressDialog = new ProgressDialog(this);
         storage = FirebaseStorage.getInstance();
