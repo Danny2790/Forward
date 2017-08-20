@@ -6,6 +6,7 @@ package com.akash.forward.Constants;
 
 public class ForwardConstant {
 
+    //sharedpref
     public final static String FORWARD_PREF = "forward_pref";
     public final static String USER_NAME = "user_name";
     public final static String USER_EMAIl = "user_email";
@@ -15,6 +16,12 @@ public class ForwardConstant {
     //Firebase
     public final static String STORAGE_REF = "images";
     public final static String FIREBASE_DB_REF = "feeds";
-    // activity intent
+
+    //activity intent
     public final static int SELECT_PICTURE = 1000;
+
+    //Messages
+    public static final String LOGIN_FAILED = "Authentcation Failed!";
+    public static final String UPLOAD_FAILED = "Upload Failed! Please try after some time";
+    public static final String SERVER_ERROR = "Server is Down! Please try after some time";
 }

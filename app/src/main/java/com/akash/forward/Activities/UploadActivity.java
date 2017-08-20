@@ -20,12 +20,9 @@ import com.akash.forward.Utility.SPManager;
 import com.akash.forward.Utility.Utils;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -35,7 +32,9 @@ import java.io.IOException;
 
 import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_REF;
 import static com.akash.forward.Constants.ForwardConstant.SELECT_PICTURE;
+import static com.akash.forward.Constants.ForwardConstant.SERVER_ERROR;
 import static com.akash.forward.Constants.ForwardConstant.STORAGE_REF;
+import static com.akash.forward.Constants.ForwardConstant.UPLOAD_FAILED;
 
 public class UploadActivity extends AppCompatActivity {
 
@@ -78,51 +77,6 @@ public class UploadActivity extends AppCompatActivity {
                 startActivityForResult(intent, SELECT_PICTURE);
             }
         });
-        setupFirebaseDbListener();
-    }
-
-    private void setupFirebaseDbListener() {
-        mFirebaseDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: datanspashot " + " key : " + dataSnapshot.getKey() + " value :" + dataSnapshot.getValue());
-                for (DataSnapshot singleShot : dataSnapshot.getChildren()) {
-                    Log.d(TAG, "onDataChange: child :  key : " + singleShot.getKey() + " value : " + singleShot.getValue());
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "onCancelled: ");
-            }
-        });
-
-        mFirebaseDatabaseReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildAdded: data snapshot value : " + dataSnapshot.getValue(Feed.class));
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildChanged: ");
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onChildRemoved: ");
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildMoved: ");
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.d(TAG, "onCancelled: ");
-            }
-        });
     }
 
     public void uploadImage() {
@@ -142,6 +96,7 @@ public class UploadActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Exception e) {
                 progressDialog.dismiss();
+                Utils.showMessage(UploadActivity.this, UPLOAD_FAILED);
             }
         }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -158,7 +113,23 @@ public class UploadActivity extends AppCompatActivity {
         UserInfo userInfo = SPManager.getUserInfo(this);
         feed.setUserInfo(userInfo);
         feed.setImageUrl(downloaduri.toString());
-        mFirebaseDatabaseReference.push().setValue(feed);
+        mFirebaseDatabaseReference.push().setValue(feed, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                //if successfull : databaserror = null
+                //if fail : database will not null display error message
+                Log.d(TAG, "onComplete: " + databaseError);
+                if (databaseError == null) {
+                    finish();
+                } else {
+                    String message = SERVER_ERROR;
+                    if (databaseError.getMessage() != null) {
+                        message = databaseError.getMessage();
+                    }
+                    Utils.showMessage(UploadActivity.this, message);
+                }
+            }
+        });
     }
 
     @Override

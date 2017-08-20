@@ -6,11 +6,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.akash.forward.Models.UserInfo;
 import com.akash.forward.R;
 import com.akash.forward.Utility.SPManager;
+import com.akash.forward.Utility.Utils;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import java.net.URL;
 import java.util.Arrays;
+
+import static com.akash.forward.Constants.ForwardConstant.LOGIN_FAILED;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -100,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                             launchFeedActivity();
                             Log.d(TAG, "onComplete: " + " user display name " + user.getDisplayName() + " email  " + user.getEmail());
                         } else {
-                            Toast.makeText(LoginActivity.this, "Authentication failed ", Toast.LENGTH_LONG).show();
+                            Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
                         }
                     }
                 });
