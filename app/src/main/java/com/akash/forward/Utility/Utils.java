@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.AccessToken;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -19,6 +20,7 @@ import static com.facebook.login.widget.ProfilePictureView.TAG;
  */
 
 public class Utils {
+    private static FirebaseDatabase mDatabase;
 
     public static void getHashKey(Context context){
         PackageInfo info;
@@ -45,5 +47,13 @@ public class Utils {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         Log.d("LoginActivity ", "current token  : " + accessToken);
         return  accessToken != null;
+    }
+
+    public static FirebaseDatabase getDatabase() {
+        if (mDatabase == null) {
+            mDatabase = FirebaseDatabase.getInstance();
+            mDatabase.setPersistenceEnabled(true);
+        }
+        return mDatabase;
     }
 }

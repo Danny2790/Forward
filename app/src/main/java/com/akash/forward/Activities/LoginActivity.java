@@ -49,15 +49,17 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
         textViewUser = (TextView) findViewById(R.id.tv_userid);
         setFacebookLogin();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        if (currentUser != null) {
+            Log.d(TAG, "onStart: " + currentUser.toString());
+            Intent intent = new Intent(this, UploadActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
-            Log.d(TAG, "onStart: " + currentUser.toString());
-        }
     }
 
     public void setFacebookLogin() {
@@ -161,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
 //        }
     }
 
-    public void signOutFirebase(){
+    public void signOutFirebase() {
         FirebaseAuth.getInstance().signOut();
     }
 }
