@@ -25,6 +25,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.TwitterAuthProvider;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import org.json.JSONObject;
 
@@ -39,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private String TAG = LoginActivity.class.getSimpleName();
     private LoginButton loginButton;
     FirebaseAuth firebaseAuth;
+    private TwitterLoginButton twitterLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +54,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         firebaseAuth = FirebaseAuth.getInstance();
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
+        twitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
+
         setFacebookLogin();
+        setTwitterLogin();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
             Log.d(TAG, "onStart: " + currentUser.toString());
@@ -61,12 +71,47 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
+    private void setTwitterLogin() {
+        twitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                Log.d(TAG, "success: " + result);
+                handleTwitterSession(result.data);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Log.d(TAG, "failure: " + exception);
+            }
+        });
+    }
+
+    private void handleTwitterSession(TwitterSession session) {
+        AuthCredential credential = TwitterAuthProvider.getCredential(
+                session.getAuthToken().token,
+                session.getAuthToken().secret);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: success twitter firebase");
+                            //launchFeedActivity();
+                        } else {
+                            Log.d(TAG, "onComplete: fail twitter");
+                            Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
+                        }
+                    }
+                });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
     }
 
     public void setFacebookLogin() {
+        loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
         callbackManager = CallbackManager.Factory.create();
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -108,7 +153,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult: twitter code " + TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE);
+        if (requestCode == TwitterAuthConfig.DEFAULT_AUTH_REQUEST_CODE) {
+            Log.d(TAG, "onActivityResult: twitter");
+            twitterLoginButton.onActivityResult(requestCode, resultCode, data);
+        } else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     public void getFacebookProfileInfo(LoginResult loginResult) {

@@ -27,4 +27,8 @@ public class ForwardConstant {
     public static final String LOGIN_FAILED = "Authentcation Failed!";
     public static final String UPLOAD_FAILED = "Upload Failed! Please try after some time";
     public static final String SERVER_ERROR = "Server is Down! Please try after some time";
+
+    //Twitter
+    public static final String TWITTER_KEY = "8ucqGhHKFTS0UW4VJySH68Vqm";
+    public static final String TWITTER_SECRET = "8PAJhO3NA9URaSE8VL4nkdYBABYvQGBKYrgM9KYk1XQVQbi9yS";
 }
