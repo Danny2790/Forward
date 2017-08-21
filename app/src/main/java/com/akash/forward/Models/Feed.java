@@ -1,5 +1,10 @@
 package com.akash.forward.Models;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.ServerValue;
+
+import java.util.HashMap;
+
 /**
  * Created by akash on 8/20/2017.
  */
@@ -10,9 +15,30 @@ public class Feed {
     private String postId;
     private int likesCount = 0;
     private int commentsCount = 0;
+    private HashMap<String, Object> timeStamp;
 
     public Feed() {
         // Default constructor required for calls to DataSnapshot.getValue(Feed.class)
+    }
+
+    public Feed(UserInfo userInfo, String imageUrl, String postid) {
+        this.userInfo = userInfo;
+        this.imageUrl = imageUrl;
+        this.postId = postid;
+        HashMap<String, Object> timestampNow = new HashMap<>();
+        timestampNow.put("timestamp", ServerValue.TIMESTAMP);
+        this.timeStamp = timestampNow;
+    }
+
+    public HashMap<String, Object> getTimeStamp() {
+        return timeStamp;
+    }
+    @Exclude
+    public long getTimestampCreatedLong(){
+        return (long)timeStamp.get("timestamp");
+    }
+    public void setTimeStamp(HashMap<String, Object> timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     public UserInfo getUserInfo() {
@@ -63,6 +89,7 @@ public class Feed {
                 ", postId='" + postId + '\'' +
                 ", likesCount=" + likesCount +
                 ", commentsCount=" + commentsCount +
+                ", timeStamp='" + timeStamp + '\'' +
                 '}';
     }
 }

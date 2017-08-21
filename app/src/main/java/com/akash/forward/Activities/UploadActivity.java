@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -109,13 +110,16 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     private void addPost(Uri downloaduri) {
-        Feed feed = new Feed();
         UserInfo userInfo = SPManager.getUserInfo(this);
         DatabaseReference dbRef = mFirebaseDatabaseReference.push();
         Log.d(TAG, "addPost:  post key :" + dbRef.getKey());
-        feed.setPostId(dbRef.getKey());
-        feed.setUserInfo(userInfo);
-        feed.setImageUrl(downloaduri.toString());
+        Log.d(TAG, "addPost: server time stamp : " + ServerValue.TIMESTAMP.toString());
+        Feed feed = new Feed(userInfo, downloaduri.toString(), dbRef.getKey());
+        //feed.setPostId(dbRef.getKey());
+        //feed.setUserInfo(userInfo);
+        //feed.setTimeStamp();
+        //feed.setImageUrl(downloaduri.toString());
+
         dbRef.setValue(feed, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {

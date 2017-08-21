@@ -75,11 +75,11 @@ public class FeedActivity extends AppCompatActivity {
                 Log.d(TAG, "onCancelled: ");
             }
         });
-
         mFirebaseDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildAdded: data snapshot value : " + dataSnapshot.getValue(Feed.class));
+                Log.d(TAG, "onChildAdded: data snapshot key : " + dataSnapshot.getKey() + " value :" + dataSnapshot.getValue());
+                //Log.d(TAG, "onChildAdded: " + dataSnapshot.getValue(Feed.class));
                 addFeedToList(dataSnapshot);
             }
 

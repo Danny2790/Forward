@@ -8,14 +8,11 @@ import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.akash.forward.Activities.LoginActivity;
 import com.facebook.AccessToken;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import static com.facebook.login.widget.ProfilePictureView.TAG;
 
 /**
  * Created by akash on 8/19/2017.
@@ -54,7 +51,7 @@ public class Utils {
     public static FirebaseDatabase getDatabase() {
         if (mDatabase == null) {
             mDatabase = FirebaseDatabase.getInstance();
-            mDatabase.setPersistenceEnabled(true);
+            //mDatabase.setPersistenceEnabled(true);
         }
         return mDatabase;
     }
