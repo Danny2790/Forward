@@ -9,6 +9,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.security.MessageDigest;
@@ -58,5 +60,10 @@ public class Utils {
 
     public static void showMessage(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+    }
+
+    public static void logOutUserFromFacebook() {
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
     }
 }
