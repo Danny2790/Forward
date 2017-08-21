@@ -94,6 +94,9 @@ public class FeedActivity extends AppCompatActivity {
         mFirebaseDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
                 Log.d(TAG, "onChildAdded: data snapshot key : " + dataSnapshot.getKey() + " value :" + dataSnapshot.getValue());
                 //Log.d(TAG, "onChildAdded: " + dataSnapshot.getValue(Feed.class));
                 addFeedToList(dataSnapshot);

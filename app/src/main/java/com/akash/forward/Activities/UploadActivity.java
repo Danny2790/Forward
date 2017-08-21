@@ -93,6 +93,7 @@ public class UploadActivity extends AppCompatActivity {
 
     public void uploadImage() {
         progressDialog.setTitle("Uploading");
+        progressDialog.setCancelable(false);
         progressDialog.show();
         StorageReference reference = storage.getReference(STORAGE_REF).child(filePath.getLastPathSegment());
         uploadTask = reference.putFile(filePath);
