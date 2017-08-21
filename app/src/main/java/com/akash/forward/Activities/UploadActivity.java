@@ -3,6 +3,7 @@ package com.akash.forward.Activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -47,6 +48,7 @@ public class UploadActivity extends AppCompatActivity {
     private FirebaseDatabase mFirebaseDatabase;
     private ProgressDialog progressDialog;
     private DatabaseReference mFirebaseDatabaseReference;
+    private Button buttonUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +62,14 @@ public class UploadActivity extends AppCompatActivity {
         storage = FirebaseStorage.getInstance();
         Button buttonGallery = (Button) findViewById(R.id.btn_gallery);
         imageviewPreview = (ImageView) findViewById(R.id.iv_image_preview);
-        Button buttonUpload = (Button) findViewById(R.id.bt_upload);
+        buttonUpload = (Button) findViewById(R.id.bt_upload);
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadImage();
+                if (filePath != null) {
+                    uploadImage();
+                }
             }
         });
 
@@ -147,6 +151,7 @@ public class UploadActivity extends AppCompatActivity {
                 filePath = data.getData();
                 Log.d(TAG, "onActivityResult: " + filePath);
                 try {
+                    enableUpload();
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                     imageviewPreview.setImageBitmap(bitmap);
                 } catch (IOException e) {
@@ -154,5 +159,17 @@ public class UploadActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void disableUpload() {
+        buttonUpload.setTextColor(Color.BLACK);
+        buttonUpload.setBackgroundColor(getResources().getColor(R.color.darkGrey));
+        buttonUpload.setEnabled(false);
+    }
+
+    private void enableUpload() {
+        buttonUpload.setTextColor(Color.WHITE);
+        buttonUpload.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        buttonUpload.setEnabled(true);
     }
 }
