@@ -2,6 +2,8 @@ package com.akash.forward.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,9 +63,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Feed feed = feedList.get(position);
         holder.textViewUsername.setText(feed.getUserInfo().getFirstName());
-        Glide.with(context)
-                .load(feed.getImageUrl())
-                .into(holder.imageViewFeed);
+//        Glide.with(context)
+//                .load(feed.getImageUrl())
+//                .placeholder(R.drawable.loading_spinner)
+//                .into(holder.imageViewFeed);
+
+        Glide.with(context).load(feed.getImageUrl()).placeholder(getProgressBarIndeterminate()).into(holder.imageViewFeed);
         Log.d(TAG, "onBindViewHolder:  post id " + feed.getPostId());
         holder.setLikeButton(feed.getPostId());
         holder.imageViewLike.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +105,17 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                 context.startActivity(intent);
             }
         });
+    }
+
+    Drawable getProgressBarIndeterminate() {
+        final int[] attrs = {android.R.attr.indeterminateDrawable};
+        final int attrs_indeterminateDrawable_index = 0;
+        TypedArray a = context.obtainStyledAttributes(android.R.style.Widget_ProgressBar, attrs);
+        try {
+            return a.getDrawable(attrs_indeterminateDrawable_index);
+        } finally {
+            a.recycle();
+        }
     }
 
     @Override
