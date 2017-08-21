@@ -1,5 +1,6 @@
 package com.akash.forward.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -34,6 +35,7 @@ public class FeedActivity extends AppCompatActivity {
     private String TAG = FeedActivity.class.getSimpleName();
     private ArrayList<Feed> feedList = new ArrayList<>();
     private FeedAdapter feedAdapter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,10 @@ public class FeedActivity extends AppCompatActivity {
             UserInfo userInfo = SPManager.getUserInfo(this);
             actionBar.setTitle("Welcome " + userInfo.getFirstName());
         }
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading ...");
+        progressDialog.show();
+
         RecyclerView feedRecyclerView = (RecyclerView) findViewById(R.id.rv_feed);
         feedAdapter = new FeedAdapter(this, feedList);
 
@@ -73,7 +79,10 @@ public class FeedActivity extends AppCompatActivity {
         mFirebaseDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "onDataChange: datanspashot " + " key : " + dataSnapshot.getKey() + " value :" + dataSnapshot.getValue());
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
+                //Log.d(TAG, "onDataChange: datanspashot " + " key : " + dataSnapshot.getKey() + " value :" + dataSnapshot.getValue());
                 //getAllFeeds(dataSnapshot);
             }
 
