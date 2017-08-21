@@ -2,6 +2,7 @@ package com.akash.forward.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +12,9 @@ import android.widget.Button;
 
 import com.akash.forward.Adapters.FeedAdapter;
 import com.akash.forward.Models.Feed;
+import com.akash.forward.Models.UserInfo;
 import com.akash.forward.R;
+import com.akash.forward.Utility.SPManager;
 import com.akash.forward.Utility.Utils;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +39,11 @@ public class FeedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            UserInfo userInfo = SPManager.getUserInfo(this);
+            actionBar.setTitle("Welcome " + userInfo.getFirstName());
+        }
         RecyclerView feedRecyclerView = (RecyclerView) findViewById(R.id.rv_feed);
         feedAdapter = new FeedAdapter(this, feedList);
 

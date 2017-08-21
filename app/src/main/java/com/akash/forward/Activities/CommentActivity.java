@@ -2,6 +2,7 @@ package com.akash.forward.Activities;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,6 +47,12 @@ public class CommentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            UserInfo userInfo = SPManager.getUserInfo(this);
+            actionBar.setTitle("Welcome " + userInfo.getFirstName());
+        }
+
         editTextComment = (EditText) findViewById(R.id.et_comment);
         buttonPostactive = (Button) findViewById(R.id.btn_comment_active);
         postId = getIntent().getStringExtra(POST_ID);

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -58,6 +59,12 @@ public class UploadActivity extends AppCompatActivity {
             mFirebaseDatabase = Utils.getDatabase();
             mFirebaseDatabaseReference = mFirebaseDatabase.getReference(FIREBASE_DB_FEEDS);
         }
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            UserInfo userInfo = SPManager.getUserInfo(this);
+            actionBar.setTitle("Welcome " + userInfo.getFirstName());
+        }
+
         progressDialog = new ProgressDialog(this);
         storage = FirebaseStorage.getInstance();
         Button buttonGallery = (Button) findViewById(R.id.btn_gallery);
