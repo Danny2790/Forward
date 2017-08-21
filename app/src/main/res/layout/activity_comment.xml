@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/v_line"
-        android:padding="@dimen/margin_vertical"
+        android:layout_marginBottom="45dp"
         tools:listitem="@layout/comment_item">
 
     </android.support.v7.widget.RecyclerView>
@@ -40,6 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:background="@color/lightGrey"
         android:orientation="horizontal">
 
         <EditText
@@ -48,7 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.70"
             android:hint="@string/comment_hint"
-            android:paddingRight="10dp" />
+            android:paddingRight="10dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black" />
 
         <Button
             android:id="@+id/btn_comment_active"

@@ -3,6 +3,8 @@ package com.akash.forward.Activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.akash.forward.Adapters.CommentAdapter;
 import com.akash.forward.Models.Comment;
 import com.akash.forward.Models.UserInfo;
 import com.akash.forward.R;
@@ -21,6 +24,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 
 import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_COMMENTS;
 import static com.akash.forward.Constants.ForwardConstant.POST_ID;
@@ -34,6 +39,8 @@ public class CommentActivity extends AppCompatActivity {
     private DatabaseReference mFirebaseDatabaseComments;
     private String postId;
     private FirebaseAuth firebaseAuth;
+    private ArrayList<Comment> commentList = new ArrayList<>();
+    private CommentAdapter commentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,11 @@ public class CommentActivity extends AppCompatActivity {
         editTextComment = (EditText) findViewById(R.id.et_comment);
         buttonPostactive = (Button) findViewById(R.id.btn_comment_active);
         postId = getIntent().getStringExtra(POST_ID);
+        RecyclerView commentRecyclerView = (RecyclerView) findViewById(R.id.rv_comment);
+        commentRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        commentRecyclerView.setHasFixedSize(true);
+        commentAdapter = new CommentAdapter(commentList);
+        commentRecyclerView.setAdapter(commentAdapter);
 
         if (mFirebaseDatabase == null) {
             mFirebaseDatabase = Utils.getDatabase();
@@ -53,10 +65,11 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void setupFirebaseComment() {
-        mFirebaseDatabaseComments.addChildEventListener(new ChildEventListener() {
+        mFirebaseDatabaseComments.child(postId).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Log.d(TAG, "onChildAdded: " + dataSnapshot.getValue());
+                Log.d(TAG, "onChildAdded: post id " + dataSnapshot.getValue());
+                addCommentToList(dataSnapshot);
             }
 
             @Override
@@ -79,6 +92,21 @@ public class CommentActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void addCommentToList(DataSnapshot dataSnapshot) {
+        Comment comment = dataSnapshot.getValue(Comment.class);
+        commentList.add(comment);
+        commentAdapter.notifyItemInserted(commentList.size() - 1);
+    }
+
+    private void getAllComments(DataSnapshot dataSnapshot) {
+        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+            Log.d(TAG, "childrens : key " + snapshot.getKey() + " value : " + snapshot.getValue());
+            Comment comment = snapshot.getValue(Comment.class);
+            commentList.add(comment);
+        }
+        commentAdapter.notifyDataSetChanged();
     }
 
     public void setupComment() {
@@ -127,13 +155,15 @@ public class CommentActivity extends AppCompatActivity {
     private void addComment() {
         String message = editTextComment.getText().toString();
         if (message.length() != 0) {
+            Log.d(TAG, "addComment: proceed to update ");
             UserInfo userInfo = SPManager.getUserInfo(this);
             Comment comment = new Comment();
             comment.setUserId(userInfo.getId());
             comment.setUserName(userInfo.getFirstName());
             comment.setText(message);
+            buttonPostactive.setEnabled(false);
+            editTextComment.setText("");
             mFirebaseDatabaseComments.child(postId).push().setValue(comment);
-            editTextComment.setText(" ");
         }
     }
 }
