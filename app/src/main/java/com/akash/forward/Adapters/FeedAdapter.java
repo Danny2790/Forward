@@ -2,8 +2,6 @@ package com.akash.forward.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_FEEDS;
 import static com.akash.forward.Constants.ForwardConstant.FIREBASE_DB_LIKES;
 import static com.akash.forward.Constants.ForwardConstant.POST_ID;
 
@@ -39,16 +36,13 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     private ArrayList<Feed> feedList;
     private Context context;
     private String TAG = FeedAdapter.class.getSimpleName();
-    private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mFirebaseDatabaseLikes;
-    private DatabaseReference mFirebaseDatabaseFeeds;
     private Boolean mProcessLike = false;
 
     public FeedAdapter(Context context, ArrayList<Feed> feedList) {
         this.context = context;
         this.feedList = feedList;
-        mFirebaseDatabase = Utils.getDatabase();
-        mFirebaseDatabaseFeeds = mFirebaseDatabase.getReference(FIREBASE_DB_FEEDS);
+        FirebaseDatabase mFirebaseDatabase = Utils.getDatabase();
         mFirebaseDatabaseLikes = mFirebaseDatabase.getReference(FIREBASE_DB_LIKES);
         firebaseAuth = FirebaseAuth.getInstance();
     }
@@ -63,12 +57,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Feed feed = feedList.get(position);
         holder.textViewUsername.setText(feed.getUserInfo().getFirstName());
-//        Glide.with(context)
-//                .load(feed.getImageUrl())
-//                .placeholder(R.drawable.loading_spinner)
-//                .into(holder.imageViewFeed);
-
-        Glide.with(context).load(feed.getImageUrl()).placeholder(getProgressBarIndeterminate()).into(holder.imageViewFeed);
+        Glide.with(context).load(feed.getImageUrl()).placeholder(R.drawable.placeholder).into(holder.imageViewFeed);
         Log.d(TAG, "onBindViewHolder:  post id " + feed.getPostId());
         holder.setLikeButton(feed.getPostId());
         holder.imageViewLike.setOnClickListener(new View.OnClickListener() {
@@ -107,16 +96,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         });
     }
 
-    Drawable getProgressBarIndeterminate() {
-        final int[] attrs = {android.R.attr.indeterminateDrawable};
-        final int attrs_indeterminateDrawable_index = 0;
-        TypedArray a = context.obtainStyledAttributes(android.R.style.Widget_ProgressBar, attrs);
-        try {
-            return a.getDrawable(attrs_indeterminateDrawable_index);
-        } finally {
-            a.recycle();
-        }
-    }
 
     @Override
     public int getItemCount() {
