@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.TextView;
 
 import com.akash.forward.Models.UserInfo;
 import com.akash.forward.R;
@@ -38,7 +37,6 @@ import static com.akash.forward.Constants.ForwardConstant.LOGIN_FAILED;
 public class LoginActivity extends AppCompatActivity {
     CallbackManager callbackManager;
     private String TAG = LoginActivity.class.getSimpleName();
-    TextView textViewUser;
     private LoginButton loginButton;
     FirebaseAuth firebaseAuth;
 
@@ -49,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         loginButton = (LoginButton) findViewById(R.id.login_button);
         loginButton.setReadPermissions(Arrays.asList("public_profile", "email"));
-        textViewUser = (TextView) findViewById(R.id.tv_userid);
         setFacebookLogin();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
@@ -130,14 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         parameters.putString("fields", "id, first_name, email");
         request.setParameters(parameters);
         request.executeAsync();
-
-        textViewUser.setText(
-                "User ID: "
-                        + loginResult.getAccessToken().getUserId()
-                        + "\n" +
-                        "Auth Token: "
-                        + loginResult.getAccessToken().getToken()
-        );
     }
 
     private void getFacebookData(JSONObject object) {
