@@ -32,8 +32,10 @@ import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.URL;
@@ -41,6 +43,8 @@ import java.util.Arrays;
 
 import io.fabric.sdk.android.Fabric;
 
+import static com.akash.forward.Constants.ForwardConstant.FIRST_NAME;
+import static com.akash.forward.Constants.ForwardConstant.ID;
 import static com.akash.forward.Constants.ForwardConstant.LOGIN_FAILED;
 import static com.akash.forward.Constants.ForwardConstant.TWITTER_KEY;
 import static com.akash.forward.Constants.ForwardConstant.TWITTER_SECRET;
@@ -93,16 +97,41 @@ public class LoginActivity extends AppCompatActivity {
             public void success(Result<TwitterSession> result) {
                 Log.d(TAG, "success: " + result);
                 TwitterSession session = result.data;
-                Log.d(TAG, "success: session user name  : " + session.getUserName());
-                Log.d(TAG, "success: session data : " + session.toString());
-                //linkMultipleAccount(result.data);
+                if (session != null) {
+                    try {
+                        Log.d(TAG, "success: session user name  : " + session.getUserName());
+                        Log.d(TAG, "success: session user id : " + session.getUserId());
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put(FIRST_NAME, session.getUserName());
+                        jsonObject.put(ID, session.getUserId());
+                        SPManager.saveUserInfo(LoginActivity.this, jsonObject.toString());
+                        handleTwitterSession(result.data);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                handleTwitterSession(result.data);
             }
 
             @Override
             public void failure(TwitterException exception) {
                 Log.d(TAG, "failure: " + exception);
+            }
+        });
+    }
+
+    public void requestTwitterEmail(TwitterSession session) {
+        TwitterAuthClient authClient = new TwitterAuthClient();
+        authClient.requestEmail(session, new Callback<String>() {
+            @Override
+            public void success(Result<String> result) {
+                Log.d(TAG, "success: " + result.data);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                // Do something on failure
+                Log.d(TAG, "fail  twitter email : " + exception);
             }
         });
     }

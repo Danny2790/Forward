@@ -31,4 +31,10 @@ public class ForwardConstant {
     //Twitter
     public static final String TWITTER_KEY = "C7E0T2XHLgyogG3K9cV6fwaPw";
     public static final String TWITTER_SECRET = "79QeEYCf8gTbNoJ32uGvySctQyaDDykKqAgqENDsvQA1dv0kTY";
+
+    //Userinfo Json key
+    public static final String FIRST_NAME = "first_name";
+    public static final String EMAIL = "email";
+    public static final String ID = "id";
+    public static final String PROFILE_PIC = "profile_pic";
 }
