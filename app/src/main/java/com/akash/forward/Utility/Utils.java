@@ -63,14 +63,16 @@ public class Utils {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
-    public static void logOutUserFromFacebook() {
+    public static void logOutUserFromFacebook(Context context) {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
+        SPManager.clearSession(context);
     }
 
-    public static void logOutUserFromTwitter() {
+    public static void logOutUserFromTwitter(Context context) {
         FirebaseAuth.getInstance().signOut();
         Twitter.logOut();
+        SPManager.clearSession(context);
     }
 
 }

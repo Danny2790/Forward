@@ -153,7 +153,7 @@ public class FeedActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_logout) {
-            Utils.logOutUserFromFacebook();
+            Utils.logOutUserFromFacebook(this);
             launchLoginActivity();
         }
         return super.onOptionsItemSelected(item);
