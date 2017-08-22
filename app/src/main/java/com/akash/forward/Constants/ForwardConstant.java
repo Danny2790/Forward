@@ -29,6 +29,6 @@ public class ForwardConstant {
     public static final String SERVER_ERROR = "Server is Down! Please try after some time";
 
     //Twitter
-    public static final String TWITTER_KEY = "8ucqGhHKFTS0UW4VJySH68Vqm";
-    public static final String TWITTER_SECRET = "8PAJhO3NA9URaSE8VL4nkdYBABYvQGBKYrgM9KYk1XQVQbi9yS";
+    public static final String TWITTER_KEY = "C7E0T2XHLgyogG3K9cV6fwaPw";
+    public static final String TWITTER_SECRET = "79QeEYCf8gTbNoJ32uGvySctQyaDDykKqAgqENDsvQA1dv0kTY";
 }
