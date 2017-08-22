@@ -26,6 +26,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -38,7 +39,11 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.util.Arrays;
 
+import io.fabric.sdk.android.Fabric;
+
 import static com.akash.forward.Constants.ForwardConstant.LOGIN_FAILED;
+import static com.akash.forward.Constants.ForwardConstant.TWITTER_KEY;
+import static com.akash.forward.Constants.ForwardConstant.TWITTER_SECRET;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,18 +56,29 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(
+                TWITTER_KEY,
+                TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
+
         setContentView(R.layout.activity_main);
+
         firebaseAuth = FirebaseAuth.getInstance();
+
         loginButton = (LoginButton) findViewById(R.id.login_button);
         twitterLoginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
 
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
         setFacebookLogin();
         setTwitterLogin();
-        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        Log.d(TAG, "onCreate: current userr : " + currentUser);
         if (currentUser != null) {
             Log.d(TAG, "onStart: " + currentUser.toString());
             launchFeedActivity();
         }
+
     }
 
     private void launchFeedActivity() {
@@ -76,6 +92,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void success(Result<TwitterSession> result) {
                 Log.d(TAG, "success: " + result);
+                TwitterSession session = result.data;
+                Log.d(TAG, "success: session user name  : " + session.getUserName());
+                Log.d(TAG, "success: session data : " + session.toString());
+                //linkMultipleAccount(result.data);
+
                 handleTwitterSession(result.data);
             }
 
@@ -90,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         AuthCredential credential = TwitterAuthProvider.getCredential(
                 session.getAuthToken().token,
                 session.getAuthToken().secret);
+        Log.d(TAG, "handleTwitterSession: token : " + session.getAuthToken().token + " secret " + session.getAuthToken().secret);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -98,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "onComplete: success twitter firebase");
                             //launchFeedActivity();
                         } else {
-                            Log.d(TAG, "onComplete: fail twitter");
+                            Log.d(TAG, "onComplete: fail twitter" + task.getException());
                             Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
                         }
                     }

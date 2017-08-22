@@ -12,6 +12,7 @@ import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.twitter.sdk.android.Twitter;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -66,4 +67,10 @@ public class Utils {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
     }
+
+    public static void logOutUserFromTwitter() {
+        FirebaseAuth.getInstance().signOut();
+        Twitter.logOut();
+    }
+
 }
