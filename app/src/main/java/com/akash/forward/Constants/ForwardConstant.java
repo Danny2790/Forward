@@ -24,7 +24,7 @@ public class ForwardConstant {
     public final static String POST_ID = "post_id";
 
     //Messages
-    public static final String LOGIN_FAILED = "Authentcation Failed!";
+    public static final String LOGIN_FAILED = "Authentication Failed!";
     public static final String UPLOAD_FAILED = "Upload Failed! Please try after some time";
     public static final String SERVER_ERROR = "Server is Down! Please try after some time";
 
