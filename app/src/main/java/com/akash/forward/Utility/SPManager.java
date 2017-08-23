@@ -7,7 +7,9 @@ import com.akash.forward.Models.UserInfo;
 import com.google.gson.Gson;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.akash.forward.Constants.ForwardConstant.FACEBOOK_LOGIN;
 import static com.akash.forward.Constants.ForwardConstant.FORWARD_PREF;
+import static com.akash.forward.Constants.ForwardConstant.TWITTER_LOGIN;
 import static com.akash.forward.Constants.ForwardConstant.USER_EMAIl;
 import static com.akash.forward.Constants.ForwardConstant.USER_ID;
 import static com.akash.forward.Constants.ForwardConstant.USER_INFO;
@@ -43,6 +45,30 @@ public class SPManager {
         Gson gson = new Gson();
         String response = getSharedPreferences(context).getString(USER_INFO, null);
         return gson.fromJson(response, UserInfo.class);
+    }
+
+    public static void setFacebookLoggedIn(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(FACEBOOK_LOGIN, true);
+        editor.apply();
+    }
+
+    public static void setTwitterLoggedIn(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(TWITTER_LOGIN, true);
+        editor.apply();
+    }
+
+    public static boolean isLoggedInWithFacebook(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(FACEBOOK_LOGIN, false);
+    }
+
+    public static boolean isLoggedInWithTwitter(Context context) {
+        SharedPreferences preferences = getSharedPreferences(context);
+        return preferences.getBoolean(TWITTER_LOGIN, false);
     }
 
     public static void clearSession(Context context) {
