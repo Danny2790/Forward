@@ -17,10 +17,10 @@ public class UserInfo {
     private String firstName;
     @SerializedName("email")
     @Expose
-    private String email;
+    private String email = "";
     @SerializedName("profile_pic")
     @Expose
-    private String profilePic;
+    private String profilePic = "";
 
 
     public String getProfilePic() {

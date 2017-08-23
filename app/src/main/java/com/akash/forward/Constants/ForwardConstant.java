@@ -37,4 +37,8 @@ public class ForwardConstant {
     public static final String EMAIL = "email";
     public static final String ID = "id";
     public static final String PROFILE_PIC = "profile_pic";
+
+    //social login key
+    public static final String FACEBOOK_LOGIN = "facebook_login";
+    public static final String TWITTER_LOGIN = "twitter_login";
 }
