@@ -97,6 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             public void success(Result<TwitterSession> result) {
                 Log.d(TAG, "success: " + result);
                 TwitterSession session = result.data;
+                // requestTwitterEmail(session);
                 if (session != null) {
                     try {
                         Log.d(TAG, "success: session user name  : " + session.getUserName());
@@ -105,6 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                         jsonObject.put(FIRST_NAME, session.getUserName());
                         jsonObject.put(ID, session.getUserId());
                         SPManager.saveUserInfo(LoginActivity.this, jsonObject.toString());
+                        Log.d(TAG, "success: " + SPManager.getUserInfo(LoginActivity.this).toString());
                         handleTwitterSession(result.data);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -147,7 +149,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: success twitter firebase");
-                            //launchFeedActivity();
+                            SPManager.setTwitterLoggedIn(LoginActivity.this);
+                            launchFeedActivity();
                         } else {
                             Log.d(TAG, "onComplete: fail twitter" + task.getException());
                             Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
@@ -192,6 +195,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Log.d(TAG, "onComplete: " + "sign in success");
                             FirebaseUser user = firebaseAuth.getCurrentUser();
+                            SPManager.setFacebookLoggedIn(LoginActivity.this);
                             launchFeedActivity();
                             Log.d(TAG, "onComplete: " + " user display name " + user.getDisplayName() + " email  " + user.getEmail());
                         } else {
