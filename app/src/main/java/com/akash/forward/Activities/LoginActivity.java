@@ -1,5 +1,6 @@
 package com.akash.forward.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -56,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     private LoginButton loginButton;
     FirebaseAuth firebaseAuth;
     private TwitterLoginButton twitterLoginButton;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class LoginActivity extends AppCompatActivity {
         Fabric.with(this, new Twitter(authConfig));
 
         setContentView(R.layout.activity_main);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading ...");
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -98,6 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.d(TAG, "success: " + result);
                 TwitterSession session = result.data;
                 // requestTwitterEmail(session);
+                progressDialog.show();
                 if (session != null) {
                     try {
                         Log.d(TAG, "success: session user name  : " + session.getUserName());
@@ -118,7 +123,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void failure(TwitterException exception) {
                 Log.d(TAG, "failure: " + exception);
+                Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
             }
+
         });
     }
 
@@ -155,6 +162,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.d(TAG, "onComplete: fail twitter" + task.getException());
                             Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
                         }
+                        progressDialog.dismiss();
                     }
                 });
     }
@@ -170,6 +178,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                progressDialog.show();
                 getFacebookProfileInfo(loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
             }
@@ -182,6 +191,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 Log.e(TAG, "onError: facebook " + error.toString());
+                Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
             }
         });
     }
@@ -201,6 +211,7 @@ public class LoginActivity extends AppCompatActivity {
                         } else {
                             Utils.showMessage(LoginActivity.this, LOGIN_FAILED);
                         }
+                        progressDialog.dismiss();
                     }
                 });
     }
